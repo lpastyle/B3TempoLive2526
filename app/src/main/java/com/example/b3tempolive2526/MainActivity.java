@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -13,6 +14,7 @@ import com.example.b3tempolive2526.databinding.ActivityMainBinding;
 import com.example.b3tempolive2526.model.TempoDate;
 import com.example.b3tempolive2526.model.TempoDaysLeft;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
      */
 
     void updateNbTempoDaysLeft() {
-        // Create an asynchronous call
+        // Create call to getTempoDaysLeft
         Call<TempoDaysLeft> call = edfApi.getTempoDaysLeft(
                 IEdfApi.API_OPTION_PARAM_VALUE,
                 Tools.getNowDate()
@@ -63,36 +65,37 @@ public class MainActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<TempoDaysLeft>() {
             @Override
-            public void onResponse(Call<TempoDaysLeft> call, Response<TempoDaysLeft> response) {
+            public void onResponse(@NonNull Call<TempoDaysLeft> call, @NonNull Response<TempoDaysLeft> response) {
                 TempoDaysLeft tempoDaysLeft = response.body();
-                if (response.code() == HttpsURLConnection.HTTP_OK && tempoDaysLeft != null) {
-                    for (int i=0; i < tempoDaysLeft.content.size(); i++) {
+                if (response.code() == HttpURLConnection.HTTP_OK && tempoDaysLeft != null) {
+                    for (int i = 0; i < tempoDaysLeft.content.size(); i++) {
                         Log.d(LOG_TAG, "typeJourEff[" + i + "] = " + tempoDaysLeft.content.get(i).typeJourEff);
                         Log.d(LOG_TAG, "nombreJours[" + i + "] = " + tempoDaysLeft.content.get(i).nombreJours);
                         Log.d(LOG_TAG, "nombreJoursTirés[" + i + "] = " + tempoDaysLeft.content.get(i).nombreJoursTires);
+                        setTempoDaysLeft(tempoDaysLeft.content);
                     }
-                    setTempoDaysLeft(tempoDaysLeft.content);
+
                 } else {
-                    Log.w(LOG_TAG,"Call to getTempoDaysLeft() failed with error code = "+response.code());
+                    Log.w(LOG_TAG, "call to getTempoDaysLeft() failed with error code " + response.code());
                 }
             }
-
             @Override
-            public void onFailure(Call<TempoDaysLeft> call, Throwable t) {
-                Log.w(LOG_TAG,"Call to getTempoDaysLeft() failed");
+            public void onFailure(@NonNull Call<TempoDaysLeft> call, @NonNull Throwable t) {
+                Log.e(LOG_TAG, "call to getTempoDaysLeft() failed ");
             }
         });
     }
 
-    private void setTempoDaysLeft(List<TempoDaysLeft.Content> contents) {
+    void setTempoDaysLeft(List<TempoDaysLeft.Content> contents) {
         for (TempoDaysLeft.Content item : contents) {
             switch (item.typeJourEff) {
+                // using hardcoded values is not reliable. This will be improved later
                 case "TEMPO_ROUGE" : binding.redDaysTv.setText(Tools.getDaysLeftFromContent(item));
-                break;
+                    break;
                 case "TEMPO_BLANC" : binding.whiteDaysTv.setText(Tools.getDaysLeftFromContent(item));
-                break;
+                    break;
                 case "TEMPO_BLEU" : binding.blueDaysTv.setText(Tools.getDaysLeftFromContent(item));
-                break;
+                    break;
             }
         }
     }
