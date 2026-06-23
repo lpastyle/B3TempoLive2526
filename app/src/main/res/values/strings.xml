@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">B3TempoLive2526</string>
+    <string name="app_name">LpaTempoApp</string>
+
+    <string name="not_available">NA</string>
+    <string name="history_bt">Historique</string>
 </resources>

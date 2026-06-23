@@ -7,13 +7,80 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8"  />
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:id="@+id/blue_days_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/tempo_blue_day_bg"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="@string/not_available"
+        android:textSize="@dimen/tempo_days_left_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/history_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/white_days_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/white_days_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/tempo_white_day_bg"
+        android:gravity="center"
+        android:text="@string/not_available"
+        android:textColor="@color/black"
+        android:textSize="@dimen/tempo_days_left_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/history_bt"
+        app:layout_constraintEnd_toStartOf="@+id/red_days_tv"
+        app:layout_constraintStart_toEndOf="@+id/blue_days_tv"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/red_days_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/tempo_red_day_bg"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="@string/not_available"
+
+        android:textSize="@dimen/tempo_days_left_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/history_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/white_days_tv"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <Button
+        android:id="@+id/history_bt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="@dimen/history_button_text_size"
+        android:text="@string/history_bt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/white_days_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
