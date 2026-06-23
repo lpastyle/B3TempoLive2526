@@ -11,6 +11,6 @@
         android:paddingBottom="40dp"
         app:captionTextSize="48dp"
         app:captionColor="@color/tempo_red_day_bg"
-       app:captionText="YNOV B3" />
+        app:captionText="Aujourd'hui" />
 
 </FrameLayout>
