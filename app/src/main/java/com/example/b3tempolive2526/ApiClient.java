@@ -56,7 +56,6 @@ public class ApiClient {
                         .addInterceptor(loggingInterceptor)  // put logging interceptor always at the end
                         .build();
 
-
                 retrofit = new Retrofit.Builder()
                         .baseUrl(EDFAPI_BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
