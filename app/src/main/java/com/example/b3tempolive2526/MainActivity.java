@@ -9,8 +9,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.b3tempolive2526.databinding.ActivityMainBinding;
 import com.example.b3tempolive2526.model.TempoDate;
 import com.example.b3tempolive2526.model.TempoDaysLeft;
+
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -21,12 +24,14 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
     private static String LOG_TAG = MainActivity.class.getSimpleName();
+    ActivityMainBinding binding;
     IEdfApi edfApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -41,11 +46,19 @@ public class MainActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "Retrofit client init failed");
             finish();
         }
+        updateNbTempoDaysLeft();
 
+    }
+
+    /*
+     *  ----------------------- Helper Methods -------------------------
+     */
+
+    void updateNbTempoDaysLeft() {
         // Create an asynchronous call
         Call<TempoDaysLeft> call = edfApi.getTempoDaysLeft(
                 IEdfApi.API_OPTION_PARAM_VALUE,
-                "2026-06-23"
+                Tools.getNowDate()
         );
 
         call.enqueue(new Callback<TempoDaysLeft>() {
@@ -53,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<TempoDaysLeft> call, Response<TempoDaysLeft> response) {
                 TempoDaysLeft tempoDaysLeft = response.body();
                 if (response.code() == HttpsURLConnection.HTTP_OK && tempoDaysLeft != null) {
-                   for (int i=0; i < tempoDaysLeft.content.size(); i++) {
-                       Log.d(LOG_TAG, "typeJourEff=" + tempoDaysLeft.content.get(i).typeJourEff);
-                       Log.d(LOG_TAG, "nombreJours=" + tempoDaysLeft.content.get(i).nombreJours);
-                       Log.d(LOG_TAG, "nombreJoursTires=" + tempoDaysLeft.content.get(i).nombreJoursTires);
-                   }
+                    for (int i=0; i < tempoDaysLeft.content.size(); i++) {
+                        Log.d(LOG_TAG, "typeJourEff[" + i + "] = " + tempoDaysLeft.content.get(i).typeJourEff);
+                        Log.d(LOG_TAG, "nombreJours[" + i + "] = " + tempoDaysLeft.content.get(i).nombreJours);
+                        Log.d(LOG_TAG, "nombreJoursTirés[" + i + "] = " + tempoDaysLeft.content.get(i).nombreJoursTires);
+                    }
+                    setTempoDaysLeft(tempoDaysLeft.content);
                 } else {
                     Log.w(LOG_TAG,"Call to getTempoDaysLeft() failed with error code = "+response.code());
                 }
@@ -69,4 +83,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setTempoDaysLeft(List<TempoDaysLeft.Content> contents) {
+        for (TempoDaysLeft.Content item : contents) {
+            switch (item.typeJourEff) {
+                case "TEMPO_ROUGE" : binding.redDaysTv.setText(Tools.getDaysLeftFromContent(item));
+                break;
+                case "TEMPO_BLANC" : binding.whiteDaysTv.setText(Tools.getDaysLeftFromContent(item));
+                break;
+                case "TEMPO_BLEU" : binding.blueDaysTv.setText(Tools.getDaysLeftFromContent(item));
+                break;
+            }
+        }
+    }
+
 }
