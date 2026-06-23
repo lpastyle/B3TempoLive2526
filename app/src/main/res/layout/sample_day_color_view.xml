@@ -9,9 +9,8 @@
         android:layout_height="300dp"
         android:paddingLeft="20dp"
         android:paddingBottom="40dp"
-        app:exampleDimension="48dp"
-        app:exampleColor="@color/tempo_red_day_bg"
-        app:exampleDrawable="@android:drawable/ic_menu_camera"
-        app:exampleString="YNOV B3" />
+        app:captionTextSize="48dp"
+        app:captionColor="@color/tempo_red_day_bg"
+       app:captionText="YNOV B3" />
 
 </FrameLayout>

@@ -44,21 +44,11 @@ public class DayColorView extends View {
                 attrs, R.styleable.DayColorView, defStyle, 0);
 
         mExampleString = a.getString(
-                R.styleable.DayColorView_exampleString);
+                R.styleable.DayColorView_captionText);
         mExampleColor = a.getColor(
-                R.styleable.DayColorView_exampleColor,
+                R.styleable.DayColorView_captionColor,
                 mExampleColor);
-        // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
-        // values that should fall on pixel boundaries.
-        mExampleDimension = a.getDimension(
-                R.styleable.DayColorView_exampleDimension,
-                mExampleDimension);
 
-        if (a.hasValue(R.styleable.DayColorView_exampleDrawable)) {
-            mExampleDrawable = a.getDrawable(
-                    R.styleable.DayColorView_exampleDrawable);
-            mExampleDrawable.setCallback(this);
-        }
 
         a.recycle();
 
