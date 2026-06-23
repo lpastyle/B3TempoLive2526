@@ -8,6 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface IEdfApi {
+    public static String API_OPTION_PARAM_VALUE = "TEMPO";
 
     //https://api-commerce.edf.fr/commerce/activet/v1/saisons/search?option=TEMPO&dateReference=2025-06-26
     @GET("commerce/activet/v1/saisons/search")
