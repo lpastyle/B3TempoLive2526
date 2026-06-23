@@ -41,19 +41,7 @@ public class TempoHistory {
         public String option;
         @SerializedName("calendrier")
         @Expose
-        public List<Calendrier> calendrier;
-
-    }
-
-    @Generated("jsonschema2pojo")
-    public class Calendrier {
-
-        @SerializedName("dateApplication")
-        @Expose
-        public String dateApplication;
-        @SerializedName("statut")
-        @Expose
-        public String statut;
+        public List<TempoDate> calendrier;
 
     }
 
