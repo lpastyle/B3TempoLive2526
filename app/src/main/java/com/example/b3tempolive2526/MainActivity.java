@@ -53,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<TempoDaysLeft> call, Response<TempoDaysLeft> response) {
                 TempoDaysLeft tempoDaysLeft = response.body();
                 if (response.code() == HttpsURLConnection.HTTP_OK && tempoDaysLeft != null) {
-                    Log.d(LOG_TAG,"typeJourEff="+tempoDaysLeft.content.get(0).typeJourEff);
-                    Log.d(LOG_TAG,"nombreJours="+tempoDaysLeft.content.get(0).nombreJours);
-                    Log.d(LOG_TAG,"nombreJoursTires="+tempoDaysLeft.content.get(0).nombreJoursTires);
+                   for (int i=0; i < tempoDaysLeft.content.size(); i++) {
+                       Log.d(LOG_TAG, "typeJourEff=" + tempoDaysLeft.content.get(i).typeJourEff);
+                       Log.d(LOG_TAG, "nombreJours=" + tempoDaysLeft.content.get(i).nombreJours);
+                       Log.d(LOG_TAG, "nombreJoursTires=" + tempoDaysLeft.content.get(i).nombreJoursTires);
+                   }
                 } else {
                     Log.w(LOG_TAG,"Call to getTempoDaysLeft() failed with error code = "+response.code());
                 }
