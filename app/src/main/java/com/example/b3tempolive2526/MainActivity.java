@@ -29,7 +29,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    public static final String TEMPO_CALENDAR_EXTRA_KEY = "tempo_calendar_ek";
     ActivityMainBinding binding;
     IEdfApi edfApi;
 
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Create call to getTempoHistory
         Call<TempoHistory> call = edfApi.getTempoHistory(
                 IEdfApi.API_OPTION_PARAM_VALUE,
-                Tools.getNowDate(),
+                Tools.getLastYearDate(),
                 Tools.getTomorrowDate(),
                 IEdfApi.API_CONSUMER_ID_PARAM_VALUE);
 
@@ -167,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent();
             intent.setClass(this, HistoryActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.putExtra(TEMPO_CALENDAR_EXTRA_KEY, tempoCalendar);
             startActivity(intent);
         }
     }
