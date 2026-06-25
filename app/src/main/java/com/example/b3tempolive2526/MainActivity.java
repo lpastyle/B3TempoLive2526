@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity {
         for (TempoDaysLeft.Content item : contents) {
             switch (item.typeJourEff) {
                 // using hardcoded values is not reliable. This will be improved later
-                case "TEMPO_ROUGE" : binding.redDaysTv.setText(Tools.getDaysLeftFromContent(item));
+                case RED: binding.redDaysTv.setText(Tools.getDaysLeftFromContent(item));
                     break;
-                case "TEMPO_BLANC" : binding.whiteDaysTv.setText(Tools.getDaysLeftFromContent(item));
+                case WHITE: binding.whiteDaysTv.setText(Tools.getDaysLeftFromContent(item));
                     break;
-                case "TEMPO_BLEU" : binding.blueDaysTv.setText(Tools.getDaysLeftFromContent(item));
+                case BLUE: binding.blueDaysTv.setText(Tools.getDaysLeftFromContent(item));
                     break;
             }
         }

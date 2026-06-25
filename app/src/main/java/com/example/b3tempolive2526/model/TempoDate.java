@@ -1,5 +1,6 @@
 package com.example.b3tempolive2526.model;
 
+import com.example.b3tempolive2526.TempoColor;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -13,6 +14,6 @@ public class TempoDate {
     public String dateApplication;
     @SerializedName("statut")
     @Expose
-    public String statut;
+    public TempoColor statut;
 
 }

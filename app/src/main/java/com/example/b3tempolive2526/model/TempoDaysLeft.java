@@ -2,6 +2,8 @@ package com.example.b3tempolive2526.model;
 
 import java.util.List;
 import javax.annotation.processing.Generated;
+
+import com.example.b3tempolive2526.TempoColor;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,7 +22,7 @@ public class TempoDaysLeft {
 
         @SerializedName("typeJourEff")
         @Expose
-        public String typeJourEff;
+        public TempoColor typeJourEff;
         @SerializedName("libelle")
         @Expose
         public String libelle;
