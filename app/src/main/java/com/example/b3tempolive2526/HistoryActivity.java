@@ -37,15 +37,16 @@ public class HistoryActivity extends AppCompatActivity {
         // Init view
         binding.tempoHistoryRv.setHasFixedSize(true);
         binding.tempoHistoryRv.setLayoutManager(new LinearLayoutManager(this));
-        TempoDateAdapter tempoDateAdapter = new TempoDateAdapter(tempoCalendar);
+        TempoDateAdapter tempoDateAdapter = new TempoDateAdapter(this, tempoCalendar);
         binding.tempoHistoryRv.setAdapter(tempoDateAdapter);
 
         ArrayList<TempoDate> parcelableArrayListExtra = getIntent().getParcelableArrayListExtra(MainActivity.TEMPO_CALENDAR_EXTRA_KEY);
         if (parcelableArrayListExtra != null) {
-            tempoCalendar.addAll(parcelableArrayListExtra);
+           tempoCalendar.addAll(parcelableArrayListExtra);
             /*for(TempoDate date : tempoCalendar) {
                 Log.d(LOG_TAG, date.dateApplication + " = " + date.statut);
             }*/
+            tempoDateAdapter.notifyDataSetChanged();
         } else {
             Log.d(LOG_TAG,"Empty tempo calendar was passed to " + LOG_TAG);
             finish();
