@@ -13,8 +13,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.b3tempolive2526.databinding.ActivityMainBinding;
 import com.example.b3tempolive2526.model.TempoDate;
 import com.example.b3tempolive2526.model.TempoDaysLeft;
+import com.example.b3tempolive2526.model.TempoHistory;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -28,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private static String LOG_TAG = MainActivity.class.getSimpleName();
     ActivityMainBinding binding;
     IEdfApi edfApi;
+
+    // view model
+    ArrayList<TempoDate> tempoCalendar = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         updateNbTempoDaysLeft();
+        updateTempoHistory();
 
     }
 
@@ -98,5 +105,50 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    void updateTempoHistory() {
+        // Create call to getTempoHistory
+        Call<TempoHistory> call = edfApi.getTempoHistory(
+                IEdfApi.API_OPTION_PARAM_VALUE,
+                Tools.getNowDate(),
+                Tools.getTomorrowDate(),
+                IEdfApi.API_CONSUMER_ID_PARAM_VALUE);
+
+        call.enqueue(new Callback<TempoHistory>() {
+            @Override
+            public void onResponse(@NonNull Call<TempoHistory> call, @NonNull Response<TempoHistory> response) {
+                tempoCalendar.clear();
+                if (response.code() == HttpURLConnection.HTTP_OK && response.body() != null) {
+                    Log.d(LOG_TAG,"Got tempo history for " + response.body().content.options.size() + " option(s)");
+                    setTempoCalendar(response.body());
+                } else {
+                    Log.e(LOG_TAG,"Call to getTempoHistory() returned error code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TempoHistory> call, @NonNull Throwable t) {
+                Log.e(LOG_TAG,"Call to getTempoHistory() failed");
+            }
+        });
+    }
+
+    void setTempoCalendar(TempoHistory tempoHistory) {
+        for(TempoHistory.Option item : tempoHistory.content.options) {
+            if (item.option.equals(IEdfApi.API_OPTION_PARAM_VALUE)) {
+                tempoCalendar.addAll(item.calendrier);
+                break;
+            }
+        }
+        if (tempoCalendar.isEmpty()) {
+            Log.w(LOG_TAG,"No data found for option "+ IEdfApi.API_OPTION_PARAM_VALUE);
+        } else {
+            for(TempoDate date : tempoCalendar) {
+                Log.d(LOG_TAG, date.dateApplication + " = " + date.statut);
+            }
+
+        }
+    }
+
 
 }
