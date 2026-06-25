@@ -60,9 +60,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e(LOG_TAG, "Retrofit client init failed");
             finish();
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateNbTempoDaysLeft();
         updateTempoHistory();
-
     }
 
     /*
