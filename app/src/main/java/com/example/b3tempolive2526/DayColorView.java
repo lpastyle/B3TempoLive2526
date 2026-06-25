@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -16,15 +15,17 @@ import androidx.core.content.ContextCompat;
  * TODO: document your custom view class.
  */
 public class DayColorView extends View {
+    private static final float CIRCLE_SCALE = 0.9f; // circle will occupy 90% of room's view
+
     private String captionText;
-    private int captionColor = Color.RED;
-    private float captionTextSize = 0;
+    private int captionTextColor = Color.BLACK;
+    private float captionTextSize = 12f;
     private int dayCircleColor = Color.GRAY;
 
+    private Context context;
 
-    private TextPaint mTextPaint;
-    private float mTextWidth;
-    private float mTextHeight;
+    private TextPaint textPaint;
+    private Paint circlePaint;
 
     public DayColorView(Context context) {
         super(context);
@@ -42,33 +43,52 @@ public class DayColorView extends View {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyle) {
+        this.context = context;
         // Load XML attributes
-        final TypedArray a = getContext().obtainStyledAttributes(
+        try (TypedArray a = getContext().obtainStyledAttributes(
                 attrs,
                 R.styleable.DayColorView,
                 defStyle,
-                0);
+                0)) {
 
-        captionText = a.getString(R.styleable.DayColorView_captionText);
-        captionColor = a.getColor(R.styleable.DayColorView_captionColor, captionColor);
-        captionTextSize = a.getDimension(R.styleable.DayColorView_captionTextSize, getResources().getDimension(R.dimen.tempo_color_view_text_size));
-        dayCircleColor = a.getColor(R.styleable.DayColorView_dayCircleColor, ContextCompat.getColor(context, R.color.tempo_undecided_day_bg));
+            captionText = a.getString(R.styleable.DayColorView_captionText);
+            if (captionText == null) {
+                captionText = context.getString(R.string.not_set);
+            }
+            captionTextColor = a.getColor(R.styleable.DayColorView_captionTextColor, captionTextColor);
+            captionTextSize = a.getDimension(R.styleable.DayColorView_captionTextSize, getResources().getDimension(R.dimen.tempo_color_view_text_size));
+            dayCircleColor = a.getColor(R.styleable.DayColorView_dayCircleColor, ContextCompat.getColor(context, R.color.tempo_undecided_day_bg));
 
-        a.recycle();
-
+            a.recycle();
+        }
         // Set up a default TextPaint object
-        mTextPaint = new TextPaint();
-        mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextAlign(Paint.Align.LEFT);
+        textPaint = new TextPaint();
+        setTextPaintAndMeasurements();
+
+        // set up a default paint object
+        circlePaint = new Paint();
+        setCirclePaint();
+
     }
 
+    private void setTextPaintAndMeasurements() {
+        // set up a default TextPaint object
+        textPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTextSize(captionTextSize);
+        textPaint.setColor(captionTextColor);
+    }
+
+    private void setCirclePaint() {
+        // set up a paint object to draw circle
+        circlePaint.setStyle(Paint.Style.FILL);
+        circlePaint.setColor(dayCircleColor);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // TODO: consider storing these as member variables to reduce
-        // allocations per draw cycle.
         int paddingLeft = getPaddingLeft();
         int paddingTop = getPaddingTop();
         int paddingRight = getPaddingRight();
@@ -77,11 +97,19 @@ public class DayColorView extends View {
         int contentWidth = getWidth() - paddingLeft - paddingRight;
         int contentHeight = getHeight() - paddingTop - paddingBottom;
 
+        // Draw circle
+        float radius = Math.min(contentHeight, contentWidth) * 0.5f * CIRCLE_SCALE;
+        canvas.drawCircle(
+                paddingLeft + contentWidth * 0.5f,
+                paddingTop + contentHeight * 0.5f,
+                radius,
+                circlePaint);
+
         // Draw the text.
         canvas.drawText(captionText,
-                paddingLeft + (contentWidth - mTextWidth) / 2,
-                paddingTop + (contentHeight + mTextHeight) / 2,
-                mTextPaint);
+                paddingLeft + contentWidth  * 0.5f,
+                paddingTop + contentHeight  * 0.5f,
+                textPaint);
 
     }
 

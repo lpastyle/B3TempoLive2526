@@ -7,10 +7,10 @@
         style="@style/Widget.Theme.B3TempoLive2526.MyView"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:paddingLeft="20dp"
-        android:paddingBottom="40dp"
-        app:captionTextSize="48dp"
-        app:captionColor="@color/tempo_red_day_bg"
-        app:captionText="Aujourd'hui" />
+        android:padding="10dp"
+        app:captionTextSize="@dimen/tempo_color_view_text_size"
+        app:captionTextColor="@color/black"
+        app:captionText="Aujourd'hui"
+        app:dayCircleColor="@color/tempo_undecided_day_bg"/>
 
 </FrameLayout>
