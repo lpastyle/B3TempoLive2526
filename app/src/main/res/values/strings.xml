@@ -10,7 +10,9 @@
     <string name="tempo_blue_color_text">bleu</string>
     <string name="tempo_undecided_color_text">indéterminé</string>
 
-
+    <!-- Text resources for day color view -->
+    <string name="dcv_tomorrow_tx">Demain</string>
+    <string name="dcv_today_tx">Aujourd\'hui</string>
     <string name="not_set">text not set</string>
 
 </resources>
