@@ -36,6 +36,9 @@ public class HistoryActivity extends AppCompatActivity {
         ArrayList<TempoDate> parcelableArrayListExtra = getIntent().getParcelableArrayListExtra(MainActivity.TEMPO_CALENDAR_EXTRA_KEY);
         if (parcelableArrayListExtra != null) {
             tempoCalendar.addAll(parcelableArrayListExtra);
+            /*for(TempoDate date : tempoCalendar) {
+                Log.d(LOG_TAG, date.dateApplication + " = " + date.statut);
+            }*/
         } else {
             Log.d(LOG_TAG,"Empty tempo calendar was passed to " + LOG_TAG);
             finish();
