@@ -1,7 +1,9 @@
 package com.example.b3tempolive2526;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -26,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static String LOG_TAG = MainActivity.class.getSimpleName();
     ActivityMainBinding binding;
     IEdfApi edfApi;
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Init views
+        binding.historyBt.setOnClickListener(this);
 
         Retrofit retrofitClient = ApiClient.get();
         if (retrofitClient != null) {
@@ -155,5 +160,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == binding.historyBt.getId()) {
+            Log.i(LOG_TAG, "history button clicked !");
+            Intent intent = new Intent();
+            intent.setClass(this, HistoryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        }
+    }
+    /* old fashioned way to handle button click with XML attribute
+       public void showHistory(View view) {
 
+        Log.i(LOG_TAG,"button clicked !");
+    } */
 }
