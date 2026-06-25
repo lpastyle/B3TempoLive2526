@@ -37,7 +37,7 @@ public class HistoryActivity extends AppCompatActivity {
         // Init view
         binding.tempoHistoryRv.setHasFixedSize(true);
         binding.tempoHistoryRv.setLayoutManager(new LinearLayoutManager(this));
-        TempoDateAdapter tempoDateAdapter = new TempoDateAdapter();
+        TempoDateAdapter tempoDateAdapter = new TempoDateAdapter(tempoCalendar);
         binding.tempoHistoryRv.setAdapter(tempoDateAdapter);
 
         ArrayList<TempoDate> parcelableArrayListExtra = getIntent().getParcelableArrayListExtra(MainActivity.TEMPO_CALENDAR_EXTRA_KEY);
