@@ -179,12 +179,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (tempoCalendar.isEmpty()) {
             Log.w(LOG_TAG,"No data found for option "+ IEdfApi.API_OPTION_PARAM_VALUE);
         } else {
-            for(TempoDate date : tempoCalendar) {
+            /*for(TempoDate date : tempoCalendar) {
                 Log.d(LOG_TAG, date.dateApplication + " = " + date.statut);
-            }
+            }*/
+
             // update custom views
             int historySize = tempoCalendar.size();
             if (historySize > 1) {
+                Log.d(LOG_TAG,"Today color=" + tempoCalendar.get(historySize - 2).statut);
+                Log.d(LOG_TAG,"Tomorrow color=" + tempoCalendar.get(historySize - 1).statut);
                 binding.todayDcv.setDayCircleColor(tempoCalendar.get(historySize - 2).statut);
                 binding.tomorrowDcv.setDayCircleColor(tempoCalendar.get(historySize - 1).statut);
             }
