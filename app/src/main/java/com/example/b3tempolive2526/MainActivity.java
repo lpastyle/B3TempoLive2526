@@ -3,14 +3,21 @@ package com.example.b3tempolive2526;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -59,7 +66,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Init views
         binding.historyBt.setOnClickListener(this);
 
+        // To be moved later
         TempoNotifications.createNotificationChannels(this);
+
+        // ask permission workflow
+        check4NotificationPermission();
 
         Retrofit retrofitClient = ApiClient.get();
         if (retrofitClient != null) {
@@ -208,4 +219,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Log.i(LOG_TAG,"button clicked !");
     } */
+
+    /*
+      ---- Notifications ---
+     */
+    // see documentation at https://developer.android.com/training/permissions/requesting?hl=fr#request-permission
+
+    // Register the permissions callback, which handles the user's response to the
+    // system permissions dialog. Save the return value, an instance of
+    // ActivityResultLauncher, as an instance variable.
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Log.i(LOG_TAG,"Notifications permission granted");
+                } else {
+                    Log.i(LOG_TAG, "Notifications permission denied");
+                    // Explain to the user that the feature is unavailable because the
+                    // feature requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                }
+            });
+
+    private void check4NotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED)
+            {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this, Manifest.permission.POST_NOTIFICATIONS)) {
+                    // In an educational UI, explain to the user why your app requires this
+                    // permission for a specific feature to behave as expected, and what
+                    // features are disabled if it's declined. In this UI, include a
+                    // "cancel" or "no thanks" button that lets the user continue
+                    // using your app without granting the permission.
+                    Log.w(LOG_TAG,"Android asked to call shouldShowRequestPermissionRationale()");
+                } else {
+                    // You can directly ask for the permission.
+                    // The registered ActivityResultCallback gets the result of this request.
+                    requestPermissionLauncher.launch(
+                            Manifest.permission.POST_NOTIFICATIONS);
+                }
+            }
+        }
+    }
+
 }
