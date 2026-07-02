@@ -32,16 +32,25 @@ public class TempoNotifications {
                 R.string.red_channel_name
         };
 
+        int[] channelDescriptions = {
+                R.string.blue_channel_description,
+                R.string.white_channel_description,
+                R.string.red_channel_description
+        };
+
         List<NotificationChannel> channels = new ArrayList<>();
-        for(int i=0 ; i < channelIds.length; i++) {
+        for (int i=0 ; i < channelIds.length; i++) {
             NotificationChannel channel = new NotificationChannel(
                     channelIds[i],
-                    context.getString()
+                    context.getString(channelNames[i]),
+                    NotificationManager.IMPORTANCE_DEFAULT
             );
+            channel.setDescription(context.getString(channelDescriptions[i]));
+            channels.add(channel);
         }
 
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
         notificationManager.
-        createNotificationChannels();
+        createNotificationChannels(channels);
     }
 }

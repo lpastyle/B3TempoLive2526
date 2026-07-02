@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Init views
         binding.historyBt.setOnClickListener(this);
 
+        TempoNotifications.createNotificationChannels(this);
+
         Retrofit retrofitClient = ApiClient.get();
         if (retrofitClient != null) {
             edfApi = retrofitClient.create(IEdfApi.class);
